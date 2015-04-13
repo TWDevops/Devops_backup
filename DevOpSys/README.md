@@ -1,7 +1,11 @@
 
 
-# DPSys
+# DevOpSys
 
+## Install
+1. First, run "npm install" to install requirement package.
+2. Modify config.json to setup DB_HOST, DB_PORT and DB_NAME.
+3. Use "node bin/www" to launch DevOpSys
 
 
 ## Usage
