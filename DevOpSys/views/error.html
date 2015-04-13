@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>{{message}}</title>
-</head>
-<body>
-<h1>{{message}}</h1>
-<h2>{{error.status}}</h2>
-<pre>{{error.stack}}</pre>
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block title %}{{error.status}} - {{message}}{% endblock %}
+
+{% block content %}
+	<h1>{{message}}</h1>
+	<h2>{{error.status}}</h2>
+	<pre>{{error.stack}}</pre>
+{% endblock %}

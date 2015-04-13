@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>{{ pagename|title }}</title>
-</head>
-<body>
-    <h1>{{ pagename|title }}</h1>
+{% extends 'layout.html' %}
+
+{% block title %}{{ pagename|title }}{% endblock %}
+
+{% block content %}
+ <h1>{{ pagename|title }}</h1>
     <table style="border:3px #FFAC55 double;padding:5px;" rules="all" cellpadding='5';>
       <tr><td>
           Name
@@ -86,5 +84,4 @@
 		</td></tr>
     {% endfor %}
     </table>
-</body>
-</html>
+    {% endblock %}
