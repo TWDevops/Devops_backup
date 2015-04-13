@@ -1,6 +1,7 @@
 {
-	"MOD_LIST":["apiman"],
+	"MOD_LIST":{"api":"apiman", "hello":"hello"},
     "DB_HOST":"192.168.122.165",
     "DB_PORT":"27017",
-    "DB_NAME":"apiman"
+    "DB_NAME":"apiman",
+    "HTTP_PORT":"8080"
 }

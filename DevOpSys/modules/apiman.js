@@ -1,9 +1,7 @@
 /**
- * New node file
+ * API Manager Module
  */
-/**
- * New node file
- */
+
 //var swig  = require('swig');
 //var mongodb = require('mongodb');
 //var MongoClient = mongodb.MongoClient;
@@ -23,7 +21,7 @@ var mongodbServer = new mongodb.Server(config.get("DB_HOST"),
 		{ auto_reconnect: true, poolSize: 10 });
 var db = new mongodb.Db(config.get("DB_NAME"), mongodbServer);
 
-function list(req, res) {
+function list(req, res, next) {
 var sendData = {};
 	console.log("use api");
 	db.open(function() {
@@ -42,9 +40,9 @@ var sendData = {};
 		})
 	});
 }
-getHandler["/list"]=list;
+getHandler["list"]=list;
 
-function listView(req, res) {
+function listView(req, res, next) {
 	var sendData = {};
 	console.log("use api");
 	db.open(function() {
@@ -66,10 +64,10 @@ function listView(req, res) {
 		})
 	});
 }
-getHandler["/listview"]=listView;
+getHandler["listview"]=listView;
 
 
-function register(req, res){
+function register(req, res, next){
 	console.log("use api");
 	var sendData = {};
 	db.open(function() {
@@ -88,7 +86,7 @@ function register(req, res){
 		});
 	});
 }
-postHandler["/register"] = register;
+postHandler["register"] = register;
 
 exports.getHandler = getHandler;
 exports.postHandler = postHandler;
