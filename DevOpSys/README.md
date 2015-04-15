@@ -13,8 +13,17 @@
 
 
 ## Developing
+list: list all api for json format.
+url: http://apimanager_ip/mod/api/list 
 
+listview: list all api for html format.
+url: http://apimanager_ip/mod/api/edit
 
+edit: modify api data.(not finish)
+url: http://apimanager_ip/mod/api/edit
+
+register: register api information.(need XHR POST to test)
+url: http://apimanager_ip/mod/api/register
 
 ### Tools
 
