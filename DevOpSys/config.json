@@ -2,6 +2,7 @@
 	"MOD_LIST":{"api":"apiman", "hello":"hello"},
     "DB_HOST":"192.168.122.165",
     "DB_PORT":"27017",
-    "DB_NAME":"apiman",
+    "DB_NAME":"devops",
+    "HTTP_ADDR":"10.102.140.74",
     "HTTP_PORT":"8080"
 }

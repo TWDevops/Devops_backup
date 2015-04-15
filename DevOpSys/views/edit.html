@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ pagename|title }}{% endblock %}
+
+{% block content %}
+<h1>{{pagename}}</h1>
+
+<form action="apiUpdate" method="post" name="apiUpdate">
+<table border="0" cellpadding="0" cellspacing="1">
+	<tbody>
+		<tr>
+			<td>Name:&nbsp;</td>
+			<td><input name="apiName" type="text" value="{{ api.apiName }}" /></td>
+			<td>Owner:&nbsp;</td>
+			<td><input name="apiOwner" type="text" value="{{ api.apiOwner}}" /></td>
+		</tr>
+		<tr>
+			<td>Call:&nbsp;</td>
+			<td><input name="apiCallee" type="text" value="{{ api.apiCall}}" /></td>
+			<td>URL:&nbsp;</td>
+			<td><input name="apiUrl" type="text" value="{{ api.apiUrl}}" /></td>
+		</tr>
+		<tr>
+			<td>Doc:&nbsp;</td>
+			<td><input name="apiDocUrl" type="text" value="{{api.apiDocUrl}}" /></td>
+			<td>Endpoint:&nbsp;</td>
+			<td><input name="apiEndPoint" type="text" value="{{api.apiEndPoint}}" /></td>
+		</tr>
+		<tr>
+			<td>Protocol:&nbsp;</td>
+			<td><input name="apiProto" type="text" value="{{api.apiProto}}" /></td>
+			<td>apiCDate:&nbsp;</td>
+			<td>{{api.apiCDate}}</td>
+		</tr>
+		<tr>
+			<td>Location:&nbsp;</td>
+			<td><input name="apiLocation" type="text" value="{{api.apiLocation}}" /></td>
+			<td>DB:&nbsp;</td>
+			<td><input name="dataSource" type="text" value="{{api.dataSource}}" /></td>
+		</tr>
+		<tr>
+			<td>Activated:&nbsp;</td>
+			<td><input name="apiActivated" type="checkbox" value="true" />​</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+
+<div>
+<table  border="0" cellpadding="0" cellspacing="1">
+	<tbody>
+		<tr>
+			<td style="vertical-align: top;">Descript:&nbsp;</td>
+			<td style="vertical-align: top;"><textarea name="apiDesc" style="margin: 0px; width: 343px; height: 62px;">{{ api.apiDesc}}</textarea></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<table cellpadding="2" rules="all" style="border:1px #22ACDD solid;padding:2px;">
+	<thead>
+		<tr>
+			<th scope="col">編號</th>
+			<th scope="col">Update Date</th>
+			<th scope="col">版本控制</th>
+			<th scope="col">Source</th>
+		</tr>
+		 {% for ver in api.apiVer %}
+		<tr>
+			<th scope="col">{{ver.no}}</th>
+			<th scope="col">{{ver.apiUDate}}</th>
+			<th scope="col">{{ver.verCtrlType}}</th>
+			<th scope="col">{{ver.srcUrl}}</th>
+		</tr>
+		 {% endfor %}
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+</form>
+{% endblock %}

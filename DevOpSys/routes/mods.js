@@ -18,7 +18,7 @@ for (var modIdx in config.get("MOD_LIST")){
 		addGet(modIdx,mod.getHandler);
 	}
 	if( typeof mod.postHandler !==  'undefined' && Object.keys(mod.postHandler).length >0){
-		addPost(mod.postHandler);
+		addPost(modIdx,mod.postHandler);
 	}
 }
 

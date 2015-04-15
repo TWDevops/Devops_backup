@@ -4,12 +4,7 @@
  * Module dependencies.
  */
 config = require("nconf");
-config.env().file({ "file":"../config.json" });
-
-console.log(config.get("DB_HOST"));
-console.log(config.get("DB_PORT"));
-console.log(config.get("DB_NAME"));
-
+config.env().file({ "file":"config.json" });
 
 var app = require('../app');
 var debug = require('debug')('DevOpSys:server');
