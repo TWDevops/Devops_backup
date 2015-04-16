@@ -3,13 +3,11 @@
  */
 var DataBase = new require('../utils/DataBase.js');
 var dbase = new DataBase();
-//var swig  = require('swig');
-//var mongodb = require('mongodb');
-//var MongoClient = mongodb.MongoClient;
-//var db;
-//var coll;
-//var express = require('express');
-//var router = express.Router();
+
+/*
+ *  Method List(head, get, post)
+ */
+var headHander = {}
 var getHandler = {};
 var postHandler = {};
 
@@ -25,7 +23,7 @@ var db = new mongodb.Db(config.get("DB_NAME"), mongodbServer);
 var db = dbase.getDb();
 
 function list(req, res, next) {
-var sendData = {};
+	var sendData = {};
 	console.log("use api");
 	db.open(function() {
 		db.collection('api', function(err, collection){
@@ -71,27 +69,70 @@ getHandler["listview"]=listView;
 
 
 function edit(req, res, next){
+	var sendData={};
 	if (req.method == 'POST') {
-		console.log("API Edit Post: " + req.body);
-		res.send("Receive: " + req.body);
-	}else if(req.query.apiId){
-		var sendData
+		console.log(req.session.apiId);
 		db.open(function() {
 			db.collection('api', function(err, collection){
-				o_id = dbase.ObjectID(req.query.apiId);
-				var cursor = collection.find({"_id": o_id});
-				cursor.each(function(err, doc){
+				apiOid = dbase.ObjectID(req.session.apiId);
+				collection.findOne({"_id": apiOid}, function(err, doc){
 					if(doc != null){
 						console.log(doc);
 						sendData = doc;
-					}else{
+						sendData["apiName"]=req.body.apiName;
+						sendData["apiOwner"]=req.body.apiOwner;
+						sendData["apiCallee"]=req.body.apiCallee;
+						sendData["apiUrl"]=req.body.apiUrl;
+						sendData["apiDocUrl"]=req.body.apiDocUrl;
+						sendData["apiEndPoint"]=req.body.apiEndPoint;
+						sendData["apiProto"]=req.body.apiProto;
+						sendData["apiLocation"]=req.body.apiLocation;
+						sendData["dataSource"]=req.body.dataSource;
+						sendData["apiDesc"]=req.body.apiDesc;
+						if (typeof req.body.apiActivated !==  'undefined' && req.body.apiActivated == "true"){
+							sendData["apiActivated"] = true;
+						}else{
+							sendData["apiActivated"] = false;
+						}
+						sendData["apiVer"]=[];
+						for(var verIdx in req.body.verNo){
+							if(req.body.verNo[verIdx]!= ""){
+								sendData["apiVer"][verIdx]={
+										"no":req.body.verNo[verIdx],
+										"apiUDate":req.body.verApiUDate[verIdx],
+										"verCtrlType":req.body.verCtrlType[verIdx],
+										"srcUrl":req.body.verSrcUrl[verIdx]
+								};
+							}
+						}
+					//}else{
+						res.send({"Receive" : sendData});
+					}
+				});
+			});
+		});
+	}else if(req.query.apiId){
+		db.open(function() {
+			console.log(req.session.apiId);
+			req.session.apiId = req.query.apiId;
+			console.log(req.session.apiId);
+			db.collection('api', function(err, collection){
+				apiOid = dbase.ObjectID(req.query.apiId);
+				//var cursor = collection.find({"_id": apiOid});
+				
+				//cursor.each(function(err, doc){
+				collection.findOne({"_id": apiOid}, function(err, doc){
+					if(doc != null){
+						console.log(doc);
+						sendData = doc;
+					//}else{
 						res.render('edit', {
 						pagename:"API Editor",
-						api:sendData
+						api:sendData,
+						apiIdHex:req.query.apiId
 						});
 					}
 				});
-				
 			});
 		});
 	}else{
@@ -99,6 +140,7 @@ function edit(req, res, next){
 	}
 }
 getHandler["edit"] = edit;
+postHandler["edit"] = edit;
 
 
 function register(req, res, next){
@@ -109,10 +151,10 @@ function register(req, res, next){
 			var cursor = collection.insert(req.body, function(err,data){
 				if (data) {
 	                console.log('Successfully Insert');
-	                sendData["state"] = "success";
+	                sendData["state"] = "0";
 	            } else {
 	                console.log('Failed to Insert');
-	                sendData["state"] = "fail";
+	                sendData["state"] = "1";
 	            }
 				db.close();
 				sendData["date"] = new Date();
