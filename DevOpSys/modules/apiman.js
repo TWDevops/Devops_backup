@@ -114,11 +114,12 @@ function edit(req, res, next){
 							console.log("result: " + result);
 							console.log("ok: " + JSON.parse(result)['ok']);
 							if(JSON.parse(result)['ok'] == 1){
-								sendData["state"] = "0";
+								sendData["state"] = 0;
 							}else{
-								sendData["state"] = "1";
+								sendData["state"] = 1;
 							}
-							sendData["UPDATE"] = doc;
+							//sendData["UPDATE"] = doc;
+							sendData["date"] = new Date();
 							sendData["result"] = result;
 							res.send(sendData);
 							db.close();
@@ -126,7 +127,9 @@ function edit(req, res, next){
 					//}else{
 					}else{
 						db.close();
-						sendData["state"] = "1";
+						sendData["state"] = 1;
+						sendData["error"] = "Data not found."
+						sendData["date"] = new Date();
 						res.send({"Receive" : sendData});
 					}
 				});
@@ -167,27 +170,33 @@ postHandler["edit"] = edit;
 function register(req, res, next){
 	//console.log("use api");
 	var sendData = {};
-	db.open(function() {
-		db.collection('api', function(err, collection){
-			var cursor = collection.insert(req.body, function(err,data){
-				if (data) {
-	                console.log('Successfully Insert');
-	                sendData["state"] = "0";
-	            } else {
-	                console.log('Failed to Insert');
-	                sendData["state"] = "1";
-	            }
-				db.close();
-				sendData["date"] = new Date();
-				res.send(sendData);
+	if (req.method == 'POST') {
+		db.open(function() {
+			db.collection('api', function(err, collection){
+				var cursor = collection.insert(req.body, function(err,data){
+					if (data) {
+		                console.log('Successfully Insert');
+		                sendData["state"] = 0;
+		            } else {
+		                console.log('Failed to Insert');
+		                sendData["state"] = 1;
+		            }
+					db.close();
+					sendData["date"] = new Date();
+					res.send(sendData);
+				});
 			});
 		});
-	});
+	}else{
+		sendData["state"] = 1;
+		sendData["date"] = new Date();
+	}
 }
 postHandler["register"] = register;
 
 
 
+exports.headHander = headHander;
 exports.getHandler = getHandler;
 exports.postHandler = postHandler;
 //exports.list = list;
