@@ -44,6 +44,11 @@ function list(req, res, next) {
 getHandler["list"]=list;
 
 function listView(req, res, next) {
+	if(req.session.apiId){
+		console.log("session.apiId: " + req.session.apiId);
+		req.session.apiId=null;
+	}
+	console.log("session.apiId: " + req.session.apiId);
 	var sendData = {};
 	//console.log("use api");
 	db.open(function() {
@@ -78,26 +83,26 @@ function edit(req, res, next){
 				collection.findOne({"_id": apiOid}, function(err, doc){
 					if(doc != null){
 						console.log(doc);
-						sendData = doc;
-						sendData["apiName"]=req.body.apiName;
-						sendData["apiOwner"]=req.body.apiOwner;
-						sendData["apiCallee"]=req.body.apiCallee;
-						sendData["apiUrl"]=req.body.apiUrl;
-						sendData["apiDocUrl"]=req.body.apiDocUrl;
-						sendData["apiEndPoint"]=req.body.apiEndPoint;
-						sendData["apiProto"]=req.body.apiProto;
-						sendData["apiLocation"]=req.body.apiLocation;
-						sendData["dataSource"]=req.body.dataSource;
-						sendData["apiDesc"]=req.body.apiDesc;
+						//sendData = doc;
+						doc["apiName"]=req.body.apiName;
+						doc["apiOwner"]=req.body.apiOwner;
+						doc["apiCallee"]=req.body.apiCallee;
+						doc["apiUrl"]=req.body.apiUrl;
+						doc["apiDocUrl"]=req.body.apiDocUrl;
+						doc["apiEndPoint"]=req.body.apiEndPoint;
+						doc["apiProto"]=req.body.apiProto;
+						doc["apiLocation"]=req.body.apiLocation;
+						doc["dataSource"]=req.body.dataSource;
+						doc["apiDesc"]=req.body.apiDesc;
 						if (typeof req.body.apiActivated !==  'undefined' && req.body.apiActivated == "true"){
-							sendData["apiActivated"] = true;
+							doc["apiActivated"] = true;
 						}else{
-							sendData["apiActivated"] = false;
+							doc["apiActivated"] = false;
 						}
-						sendData["apiVer"]=[];
+						doc["apiVer"]=[];
 						for(var verIdx in req.body.verNo){
 							if(req.body.verNo[verIdx]!= ""){
-								sendData["apiVer"][verIdx]={
+								doc["apiVer"][verIdx]={
 										"no":req.body.verNo[verIdx],
 										"apiUDate":req.body.verApiUDate[verIdx],
 										"verCtrlType":req.body.verCtrlType[verIdx],
@@ -105,7 +110,23 @@ function edit(req, res, next){
 								};
 							}
 						}
+						collection.update({"_id": apiOid},{'$set':doc},{"w":1},function(err, result){
+							console.log("result: " + result);
+							console.log("ok: " + JSON.parse(result)['ok']);
+							if(JSON.parse(result)['ok'] == 1){
+								sendData["state"] = "0";
+							}else{
+								sendData["state"] = "1";
+							}
+							sendData["UPDATE"] = doc;
+							sendData["result"] = result;
+							res.send(sendData);
+							db.close();
+						});
 					//}else{
+					}else{
+						db.close();
+						sendData["state"] = "1";
 						res.send({"Receive" : sendData});
 					}
 				});
@@ -124,11 +145,11 @@ function edit(req, res, next){
 				collection.findOne({"_id": apiOid}, function(err, doc){
 					if(doc != null){
 						console.log(doc);
-						sendData = doc;
+						//sendData = doc;
 					//}else{
 						res.render('edit', {
 						pagename:"API Editor",
-						api:sendData,
+						api:doc,
 						apiIdHex:req.query.apiId
 						});
 					}
