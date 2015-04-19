@@ -21,6 +21,7 @@ DataBase.prototype.getDb = function(){
 }
 
 DataBase.prototype.ObjectID = function(o_id){
+	var oid = null;
 	oid =  new ObjectId(o_id);
 	return oid;
 }

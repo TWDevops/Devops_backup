@@ -69,6 +69,7 @@
 			<th scope="col">Update Date</th>
 			<th scope="col">版本控制</th>
 			<th scope="col">Source</th>
+			<th scope="col">Deploy</th>
 		</tr>
 		{% for ver in api.apiVer %}
 		<tr>
@@ -76,6 +77,13 @@
 			<th scope="col"><input name="verApiUDate" readonly="readonly" size="18" type="text" value="{{ver.apiUDate}}" /></th>
 			<th scope="col"><input name="verCtrlType" readonly="readonly" size="5" type="text" value="{{ver.verCtrlType}}" /></th>
 			<th scope="col"><input name="verSrcUrl" readonly="readonly" size="30" type="text" value="{{ver.srcUrl}}"/></th>
+			<th scope="col">
+				<input {% if ver.deploy == 0 %}checked="checked"{% endif %} name="verDeploy{{ver.no}}" type="radio" value="0" /><label>Disable</label>&nbsp;&nbsp;
+				<input {% if ver.deploy == 3 %}checked="checked"{% endif %} name="verDeploy{{ver.no}}" type="radio" value="3" /><label>Dev</label>&nbsp;&nbsp;
+				<input {% if ver.deploy == 2 %}checked="checked"{% endif %} name="verDeploy{{ver.no}}" type="radio" value="2" /><label>Test</label>&nbsp;&nbsp;
+				<input {% if ver.deploy == 1 %}checked="checked"{% endif %} name="verDeploy{{ver.no}}" type="radio" value="1" /><label>On</label>&nbsp;
+				<input name="Deploy" type="button" value="Deploy" onclick="javascript:location.href='/mod/task/setdeploy/{{ver.no}}'" />
+			</th>
 		</tr>
 		{% endfor %}
 		<tr>
@@ -83,6 +91,8 @@
 			<th scope="col"><input name="verApiUDate" size="18" type="text" /></th>
 			<th scope="col"><input name="verCtrlType" size="5" type="text" /></th>
 			<th scope="col"><input name="verSrcUrl" size="30" type="text" /></th>
+			<th>
+			</th>
 		</tr>
 	</thead>
 	<tbody>

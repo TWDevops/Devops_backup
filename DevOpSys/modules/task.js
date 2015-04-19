@@ -22,6 +22,32 @@ function getTask(req, res, next) {
 }
 getHandler["gettask/:action"] = getTask;
 
+function setDeploy(req, res, next) {
+	var sendData = {};
+	console.log("Set Task");
+	if(req.session.apiId){
+		var apiOid = dbase.ObjectID(req.session.apiId);
+		var verObj = {};
+		verObj['no'] = req.params.verNo;
+		//sendData['_id'] = apiOid;
+		//sendData['apiVer.no'] = req.params.verNo;
+		db.open(function() {
+			db.collection('api', function(err, collection){
+				//apiOid = dbase.ObjectID(req.session.apiId);
+				collection.findOne( { "_id": apiOid },{ "apiVer" : {$elemMatch: {"no":req.params.verNo}}}, function(err, doc){
+					sendData = doc;
+					console.log(doc["apiVer"][0]);
+					res.send(sendData);
+				});
+			})
+		});
+	}else{
+		sendData["info"] = "Nothine to do.";
+		res.send(sendData);
+	}
+}
+getHandler["setdeploy/:verNo"] = setDeploy;
+
 exports.headHander = headHander;
 exports.getHandler = getHandler;
 exports.postHandler = postHandler;

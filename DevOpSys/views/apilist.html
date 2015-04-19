@@ -35,6 +35,7 @@
 						<td>Update Date</td>
 						<td>版本控制</td>
 						<td>Source</td>
+						<td>Deploy</td>
 					</tr>
 					{% for ver in api.apiVer %}
 					<tr>
@@ -42,6 +43,17 @@
 						<td>{{ver.apiUDate}}</td>
 						<td>{{ver.verCtrlType}}</td>
 						<td>{{ver.srcUrl}}</td>
+						<td>
+							{% if  ver.deploy == 0 %}
+								Disable
+							{% elif ver.deploy == 1 %}
+								On
+							{% elif ver.deploy == 2 %}
+								Test
+							{% else %}
+								Dev
+							{% endif %}
+						</td>
 					</tr>
 					{% endfor %}
 				</tbody>

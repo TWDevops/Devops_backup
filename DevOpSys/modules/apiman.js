@@ -75,11 +75,13 @@ getHandler["listview"]=listView;
 
 function edit(req, res, next){
 	var sendData={};
+	var apiOid = null;
 	if (req.method == 'POST') {
 		console.log(req.session.apiId);
 		db.open(function() {
 			db.collection('api', function(err, collection){
 				apiOid = dbase.ObjectID(req.session.apiId);
+				console.log(apiOid);
 				collection.findOne({"_id": apiOid}, function(err, doc){
 					if(doc != null){
 						console.log(doc);
@@ -103,10 +105,11 @@ function edit(req, res, next){
 						for(var verIdx in req.body.verNo){
 							if(req.body.verNo[verIdx]!= ""){
 								doc["apiVer"][verIdx]={
-										"no":req.body.verNo[verIdx],
-										"apiUDate":req.body.verApiUDate[verIdx],
-										"verCtrlType":req.body.verCtrlType[verIdx],
-										"srcUrl":req.body.verSrcUrl[verIdx]
+									"no":req.body.verNo[verIdx],
+									"apiUDate":req.body.verApiUDate[verIdx],
+									"verCtrlType":req.body.verCtrlType[verIdx],
+									"srcUrl":req.body.verSrcUrl[verIdx],
+									"deploy":req.body["verDeploy" + req.body.verNo[verIdx]]
 								};
 							}
 						}
