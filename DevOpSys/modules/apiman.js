@@ -154,9 +154,10 @@ function edit(req, res, next){
 						//sendData = doc;
 					//}else{
 						res.render('edit', {
-						pagename:"API Editor",
-						api:doc,
-						apiIdHex:req.query.apiId
+							pagename:"API Editor",
+							apiKey:req.session.apiId,
+							api:doc,
+							apiIdHex:req.query.apiId
 						});
 					}
 				});
@@ -173,8 +174,14 @@ postHandler["edit"] = edit;
 function register(req, res, next){
 	//console.log("use api");
 	var sendData = {};
+	if(req.session.apiId){
+		req.session.apiId = null;
+	}
+	console.log("req.session.apiID: " + req.session.apiId);
 	if (req.method == 'POST') {
-		db.open(function() {
+		sendData = req.body;
+		res.send(sendData);
+		/*db.open(function() {
 			db.collection('api', function(err, collection){
 				var cursor = collection.insert(req.body, function(err,data){
 					if (data) {
@@ -189,12 +196,16 @@ function register(req, res, next){
 					res.send(sendData);
 				});
 			});
-		});
+		});*/
 	}else{
+		res.render('register', {
+			pagename:"API Register"
+		});
 		sendData["state"] = 1;
 		sendData["date"] = new Date();
 	}
 }
+getHandler["register"] = register;
 postHandler["register"] = register;
 
 
