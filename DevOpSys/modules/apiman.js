@@ -179,11 +179,25 @@ function register(req, res, next){
 	}
 	console.log("req.session.apiID: " + req.session.apiId);
 	if (req.method == 'POST') {
-		sendData = req.body;
-		res.send(sendData);
-		/*db.open(function() {
+		//sendData = req.body;
+		var insertObj = {};
+		insertObj['apiName'] = req.body.apiName;
+		insertObj['apiOwner'] = req.body.apiOwner;
+		insertObj['apiDesc'] = req.body.apiDesc;
+		insertObj['apiVer'] = null;
+		insertObj['apiCallee'] = req.body.apiCallee;
+		insertObj['apiUrl'] = req.body.apiUrl;
+		insertObj['apiDocUrl'] = req.body.apiDocUrl;
+		insertObj['apiEndPoint'] = req.body.apiEndPoint;
+		insertObj['apiProto'] = req.body.apiProto;
+		insertObj['apiCDate'] = new Date();;
+		insertObj['apiLocation'] = req.body.apiLocation;
+		insertObj['dataSource'] = req.body.dataSource;
+		insertObj['apiActivated'] = req.body.apiActivated;
+		//res.send(insertObj);
+		db.open(function() {
 			db.collection('api', function(err, collection){
-				var cursor = collection.insert(req.body, function(err,data){
+				var cursor = collection.insert(insertObj, function(err,data){
 					if (data) {
 		                console.log('Successfully Insert');
 		                sendData["state"] = 0;
@@ -196,7 +210,7 @@ function register(req, res, next){
 					res.send(sendData);
 				});
 			});
-		});*/
+		});
 	}else{
 		res.render('register', {
 			pagename:"API Register"
